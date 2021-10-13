@@ -11,6 +11,8 @@ Puedes ejecutar todos los test con
 ```bash
  $ go test ./...
 ```
+#Documentation
+Para ver la docmentación interactiva lanzar el servidor y acceder al siguiente [link](http://localhost:8080/swagger/index.html)
 
 # Componentes 
 
