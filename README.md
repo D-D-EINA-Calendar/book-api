@@ -7,6 +7,10 @@ Tras clonar el repositorio funciona con el comando
 ```bash
  $ go run ./...
 ```
+Puedes ejecutar todos los test con 
+```bash
+ $ go test ./...
+```
 
 # Componentes 
 
