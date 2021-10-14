@@ -135,8 +135,59 @@ func TestCreate(t *testing.T) {
 //TODO
 func TestPublish(t *testing.T) {}
 
-//TODO
-func TestDelete(t *testing.T) {}
+func TestDelete(t *testing.T) {
+
+	// · Test · //
+	type args struct {
+		id string;
+	}
+	type want struct {
+		err    error
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  want
+		mocks func(m mocks)
+	}{
+		{
+			name: "Should delete a book sccesfully",
+			args: args{id: "1"},
+			want: want{err: nil},
+			mocks: func(m mocks) {
+				m.bookRepository.EXPECT().Delete("1").Return(nil)
+			},
+		},
+		{
+			name: "Should return error - book not found",
+			args: args{id: "2"},
+			want: want{err: apperrors.ErrNotFound},
+			mocks: func(m mocks) {
+				m.bookRepository.EXPECT().Delete("2").Return(apperrors.ErrNotFound)
+			},
+		},
+	}
+	// · Runner · //
+	for _, tt := range tests {
+		//Prepare
+
+		m := mocks{
+			bookRepository: mockups.NewMockBookRepository(gomock.NewController(t)),
+		}
+
+		tt.mocks(m)
+		service := booksrv.New(m.bookRepository)
+
+		//Execute
+		err := service.Delete(tt.args.id)
+
+		//Verify
+		if tt.want.err != nil && err != nil {
+			assert.Equal(t, tt.want.err.Error(), err.Error())
+		}
+
+	}
+}
 
 func simplemockBook(id string, name string) domain.Book {
 	book := domain.NewBook(id, name)
